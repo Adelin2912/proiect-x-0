@@ -1,0 +1,62 @@
+Jocul de X si 0 - Documentatie
+
+Proiectul isi propune realizearea unui joc X si 0  cu doua moduri:
+ - jucator contra jucator
+ - jucator contra computer
+Proiectul are si o interfata grafica (GUI), care este pusa la dispozitie de modulul Tkinter.
+Pentru a rula aplicatia, este necesara instalarea modului Tkinter, dupa comanda "pip install tk".
+
+Aplicatia continte 4 fisiere de tip .py, dupa cum urmeaza:
+ - main.py unde se afla punctul de pornire al aplicatiei si initializarea GUI-ului
+ - player_vs_player.py, care contine toata logica modului de joc "jucator contra jucator"
+ - player_vs_pc.py, care contine toata logica modului de joc "jucator contra computer"
+ - helper.py, care contine functii si variabile comune intregii aplicatii (ex. o functie de verificare castigator
+ care este folosita in ambele moduri de joc)
+
+In main.py, se apeleaza functia "play()", care initializeaza modurile de joc si GUI-ul. GUI-ul consta initial intr-un
+meniu cu 4 butoane:
+ - buton de titlu "Bun venit la X si 0", care este doar cu scop de prezentare si nu are o alta functionalitate
+ - "Contra computer", care initializeaza modul de joc contra computer-ului; la apasarea sa, se executa comanda
+ "play_with_pc", care apeleaza functia "player_versus_pc".
+ - "Doi jucatori", care initializeaza modul de joc "player versus player"; la apasarea sa, se executa comanda
+ "play_with_player", care apeleaza functia "player_versus_player".
+ Descrierea celor doua functionalitati se afla mai jos in documentatie.
+ - "Iesire", care inchide GUI-ul si totodata aplicatia.
+Meniul este creat si i se asociaza butoanele mentionate prin functionalitatile predefinite ale Tkinter.
+
+    Functia "player_versus_player(game_board)" se afla in "player_vs_player.py" si primeste ca paramteru elemntul de GUI
+creat de Tkinter, in cazul nostru meniul, care va deveni tabla de joc. Meniul este distrus prin apelul functiei
+predefinite ".destroy()" si se creeaza altul nou, care reprezinta grid-ul de X si 0. In partea de deasupra sa, se adauga
+doua butoane ("Jucator 1" si "Jucator 2") cu scop de a afisa al cui este randul. Player-ul curent are butonul in starea
+"ENABLED", iar celalalt in starea "DISABLED".
+    Ulterior se apeleaza functia "generate_gameboard_with_player". Aceasta primeste ca parametrii tabla de joc, generata de
+Tkinter si cele doua butoane menitonate anterior. Se genereaza cate 3 linii, iar pentru fiecare linie cate 3 butoane,
+rezultand un grid de 3x3 (9 butoane). Fiecarui buton i se asociaza coamnda "get_button_text_with_players", care primeste
+ca paramterii indecsii butonului, tabla de joc, si cele doua butoane de prezentare.
+    In "get_button_text_with_players", se verifica daca pozitia de pe board este goala, iar in caz afirmativ, se verifica
+care player a apasat butonul. Player-ului 1 i se asociaza numerele pare, iar player-ului doi numerele impare.
+In variabila globala "player_index" se retine index-ul player-ului, si se incrementeaza dupa fiecare mutare.
+Dupa asocierea butonului cu textul X sau 0, prin folosirea functiei predefinite ".config", se verifica daca un jucator
+a castigat sau nu, sau daca tabla de joc este plina, caz in care este egalitate. Funcita se peleaza recursiv pana la
+indeplinirea uneia din conditiile de castig sau egalitate.
+    Pentru a verifica daca un player a castigat, se apeleaza functia "check_winner(board, symbol)", din fisierul "helper.py",
+care primeste ca paramterii tabla de joc si simbolul jucatorului (X sau 0). Aceasta functie verifica toate posibilitatile
+de castig (3 simboluri de X sau 0 consecutive, fie pe orizontala, fie pe veritcala sau diagonala). In caz afirmativ, se
+distruge gameboard-ul si se afiseaza un messagebox cu jucatorul castigator.
+    Pentru a verifica daca tabla este plina, se apeleaza functia "is_board_full()" din helper. Aceasta functie itereaza
+prin toate elementele board-ului si verifica care este libera. In acest caz, se afiseaza un messagebox pentru egalitate.
+Messagebox-ul este generat intern prin apelul unei funcitei interne Tkinter "messagebox.showinfo".
+
+    Modul de joc "player versus computer" functioneaza la fel ca si "player versus player", singura diferenta este ca,
+la verificarea textului pentru a-l asocia unui buton din grid, se verifica daca este randul celui de-al doilea jucator,
+adica al computer-ului. In acest caz, se apeleaza functia din helper "computer_turn()", care intoarce o pereche de tip
+[i, j] ce reprezinta casuta la care va fi asociat simbolul 0 al computer-ului.
+    Functia "computer_turn()" din helper, apeleaza o alta funcite "get_empty_positions()" care itereaza prin grid-ul
+tablei de joc si intoarce toate casutele libere, fara simbol. Apoi pozitia la care va muta computerul este aleasa random
+din lista celor libere.
+
+
+https://docs.python.org/3/library/tkinter.html
+https://www.tutorialspoint.com/python/tk_button.htm
+https://www.pythonguis.com/tutorials/create-buttons-in-tkinter/
+https://www.geeksforgeeks.org/python-grid-method-in-tkinter/
